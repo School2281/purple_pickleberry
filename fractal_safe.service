@@ -1,0 +1,95 @@
+[Unit]
+Description=Mandelbrot Fractal Generator - Hardened
+After=network.target nginx.service
+Wants=network.target
+
+[Service]
+Type=simple
+User=kali
+Group=www-data
+WorkingDirectory=/var/www/html/fractal
+
+# Use Gunicorn instead of direct Python (better process management)
+ExecStart=/usr/local/bin/gunicorn \
+          --workers 2 \
+          --threads 1 \
+          --worker-class sync \
+          --timeout 30 \
+          --max-requests 200 \
+          --max-requests-jitter 50 \
+          --bind 127.0.0.1:5000 \
+          fractal_app:app
+
+Restart=always
+RestartSec=5
+
+# ============================================
+# CRITICAL RESOURCE LIMITS
+# ============================================
+
+# MEMORY - Prevent memory exhaustion
+MemoryMax=512M              # Hard limit - process killed if exceeded
+MemoryHigh=384M             # Soft limit - tries to stay below
+MemorySwapMax=128M          # Limit swap usage
+
+# CPU - Prevent CPU starvation
+CPUQuota=50%                # Max 50% of one CPU core
+CPUSchedulingPolicy=idle    # Run only when system is idle
+Nice=15                     # Low priority
+
+# PROCESSES - Prevent fork bombs
+TasksMax=3                  # Only 3 concurrent tasks
+LimitNPROC=10               # Max processes
+LimitNOFILE=50              # Max open files
+
+# ============================================
+# TIMEOUTS - Prevent hanging
+# ============================================
+
+# Process timeouts
+TimeoutStartSec=15
+TimeoutStopSec=15
+TimeoutSec=30
+
+# Kill hung processes aggressively
+KillMode=mixed              # Kill main and children
+KillSignal=SIGTERM
+SendSIGKILL=yes             # Force kill if needed
+
+# ============================================
+# SECURITY SANDBOXING
+# ============================================
+
+# Filesystem protection
+ProtectSystem=strict        # Read-only filesystem except specific paths
+ReadWritePaths=/var/www/html/fractal /tmp  # Only these can be written
+PrivateTmp=yes              # Isolated /tmp
+
+# System access restrictions
+ProtectHome=yes             # Can't access /home
+ProtectKernelTunables=yes   # Can't modify kernel settings
+ProtectKernelModules=yes    # Can't load kernel modules
+ProtectControlGroups=yes    # Can't modify cgroups
+ProtectProc=invisible       # Can't see other processes
+
+# Network restrictions
+PrivateNetwork=no           # Needs network (but restricted)
+RestrictAddressFamilies=AF_INET AF_INET6  # Only IP networking
+
+# Privilege restrictions
+NoNewPrivileges=yes         # Can't gain new privileges
+CapabilityBoundingSet=      # No capabilities
+AmbientCapabilities=
+
+# System call filtering
+SystemCallFilter=~@clock @cpu-emulation @debug @keyring @module @mount @obsolete @raw-io @reboot @setuid @swap
+SystemCallArchitectures=native
+
+# ============================================
+# OOM KILLER - Make it killable
+# ============================================
+
+OOMScoreAdjust=1000         # Kernel will kill this process first if OOM
+
+[Install]
+WantedBy=multi-user.target
