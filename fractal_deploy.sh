@@ -12,7 +12,7 @@ set -e  # Exit on error
 # ============================================
 
 # Where your files are located (source)
-SOURCE_DIR="/home/kali/gold-pickleberry"
+SOURCE_DIR="/home/kali/purple-pickleberry"
 
 # Where files will be deployed (destination)
 APP_DIR="/var/www/html/fractal"
