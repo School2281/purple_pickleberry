@@ -107,7 +107,8 @@ def fractal_viewer():
     # Get image URL from query params, or use default
     image_url = request.args.get('img', '/fractal?w=800&h=600&iter=100')
     
-    return f"""
+    # Using triple quotes but escaping the f-string properly
+    html_content = f'''
 <!DOCTYPE html>
 <html>
 <head>
@@ -115,40 +116,40 @@ def fractal_viewer():
     <style>
         * {{ margin: 0; padding: 0; box-sizing: border-box; }}
         
-        body { 
+        body {{ 
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
             color: white;
-        }
+        }}
         
-        .container { 
+        .container {{ 
             max-width: 1200px; 
             margin: 0 auto;
-        }
+        }}
         
-        header { 
+        header {{ 
             text-align: center; 
             margin-bottom: 30px;
             text-shadow: 0 2px 4px rgba(0,0,0,0.3);
-        }
+        }}
         
-        h1 { 
+        h1 {{ 
             font-size: 2.5rem; 
             margin-bottom: 10px; 
-        }
+        }}
         
-        .viewer-container { 
+        .viewer-container {{ 
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 20px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             border: 1px solid rgba(255,255,255,0.2);
-        }
+        }}
         
-        .controls { 
+        .controls {{ 
             background: rgba(255, 255, 255, 0.15);
             padding: 15px 20px;
             border-radius: 15px;
@@ -157,32 +158,32 @@ def fractal_viewer():
             flex-wrap: wrap;
             gap: 15px;
             align-items: center;
-        }
+        }}
         
-        .control-group { 
+        .control-group {{ 
             display: flex; 
             align-items: center; 
             gap: 10px; 
-        }
+        }}
         
-        label { 
+        label {{ 
             font-weight: 600; 
             min-width: 80px;
-        }
+        }}
         
-        .slider-container { 
+        .slider-container {{ 
             flex: 1; 
             min-width: 200px;
-        }
+        }}
         
-        input[type="range"] { 
+        input[type="range"] {{ 
             width: 100%; 
             height: 6px;
             -webkit-appearance: none;
             background: rgba(255,255,255,0.2);
             border-radius: 10px;
             outline: none;
-        }
+        }}
         
         input[type="range"]::-webkit-slider-thumb {{
             -webkit-appearance: none;
@@ -194,7 +195,7 @@ def fractal_viewer():
             box-shadow: 0 4px 8px rgba(0,0,0,0.3);
         }}
         
-        .value-display { 
+        .value-display {{ 
             background: rgba(255,255,255,0.2);
             padding: 5px 12px;
             border-radius: 20px;
@@ -203,7 +204,7 @@ def fractal_viewer():
             font-family: 'Monaco', 'Consolas', monospace;
         }}
         
-        .image-wrapper { 
+        .image-wrapper {{ 
             position: relative; 
             overflow: hidden;
             border-radius: 15px;
@@ -214,7 +215,7 @@ def fractal_viewer():
         
         .image-wrapper:active {{ cursor: grabbing; }}
         
-        #fractalImage { 
+        #fractalImage {{ 
             position: absolute;
             top: 50%;
             left: 50%;
@@ -224,7 +225,7 @@ def fractal_viewer():
             -webkit-user-drag: none;
         }}
         
-        .coordinates { 
+        .coordinates {{ 
             position: absolute;
             bottom: 15px;
             left: 15px;
@@ -497,8 +498,10 @@ Current zoom: ${{scale.toFixed(2)}}x`;
     </script>
 </body>
 </html>
-"""
+'''
     
+    return html_content
+
 if __name__ == '__main__':
     # Create matplotlib temp dir
     os.makedirs('/tmp/matplotlib', exist_ok=True)
