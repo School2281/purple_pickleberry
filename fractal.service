@@ -7,7 +7,7 @@ Wants=network.target
 Type=simple
 User=kali
 WorkingDirectory=/var/www/html/fractal
-ExecStart=/usr/bin/python3 /var/www/html/fractal/fractal_app.py
+ExecStart=/usr/local/bin/gunicorn --workers 10 fractal_app:app
 Restart=always
 RestartSec=10
 
