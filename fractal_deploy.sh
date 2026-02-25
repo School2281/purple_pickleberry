@@ -5,6 +5,9 @@
 # Make executable: chmod +x deploy_fractal.sh
 # Run: ./deploy_fractal.sh
 
+# Self-heal permissions
+[ -x "$0" ] || chmod +x "$0"
+
 set -e  # Exit on error
 
 # ============================================
