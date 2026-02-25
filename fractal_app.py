@@ -389,7 +389,7 @@ def fractal_viewer():
         </div>
     </div>
 
-    <script>
+        <script>
         // State
         let scale = 1.0;
         let posX = 0;
@@ -422,7 +422,7 @@ def fractal_viewer():
         const coordsDisplay = document.getElementById('coords');
         
         // Initialize
-        function init() {
+        function init() {{
             centerImage();
             
             // Event listeners
@@ -437,61 +437,61 @@ def fractal_viewer():
             wrapper.addEventListener('contextmenu', e => e.preventDefault());
             
             // Speed slider
-            speedSlider.addEventListener('input', function() {
+            speedSlider.addEventListener('input', function() {{
                 cycleSpeed = parseInt(this.value);
                 speedValue.textContent = cycleSpeed + 'ms';
-                if (isCycling) {
+                if (isCycling) {{
                     restartCycle();
-                }
-            });
+                }}
+            }});
             
             // Start cycling
             startCycle();
             updateDisplay();
-        }
+        }}
         
         // Cycle functions
-        function startCycle() {
+        function startCycle() {{
             if (cycleTimer) clearTimeout(cycleTimer);
             cycleTimer = setTimeout(loadNextIteration, cycleSpeed);
-        }
+        }}
         
-        function stopCycle() {
-            if (cycleTimer) {
+        function stopCycle() {{
+            if (cycleTimer) {{
                 clearTimeout(cycleTimer);
                 cycleTimer = null;
-            }
-        }
+            }}
+        }}
         
-        function restartCycle() {
+        function restartCycle() {{
             stopCycle();
             startCycle();
-        }
+        }}
         
-        function toggleCycle() {
+        function toggleCycle() {{
             isCycling = !isCycling;
             cycleButton.textContent = isCycling ? '⏸️ Pause' : '▶️ Resume';
-            if (isCycling) {
+            if (isCycling) {{
                 startCycle();
-            } else {
+            }} else {{
                 stopCycle();
-            }
-        }
+            }}
+        }}
         
-        function loadNextIteration() {
+        function loadNextIteration() {{
             if (!isCycling) return;
             
             // Update iteration
             currentIter += cycleDirection;
             
             // Bounce between 10 and 100
-            if (currentIter >= 100) {
+            if (currentIter >= 100) {{
                 currentIter = 100;
                 cycleDirection = -1;
-            } else if (currentIter <= 10) {
+            }} else if (currentIter <= 10) {{
                 currentIter = 10;
                 cycleDirection = 1;
-            }
+            }}
             
             // Update displays
             currentIterSpan.textContent = currentIter;
@@ -510,73 +510,73 @@ def fractal_viewer():
             
             // Schedule next iteration
             cycleTimer = setTimeout(loadNextIteration, cycleSpeed);
-        }
+        }}
         
         // Image events
-        image.onload = function() {
+        image.onload = function() {{
             loading.style.display = 'none';
             lastLoadTime = Date.now() - (image.src.split('t=')[1] || Date.now());
             responseTimeSpan.textContent = lastLoadTime + 'ms';
             
             // Check for DoS (slow response)
-            if (lastLoadTime > 2000) { // More than 2 seconds
+            if (lastLoadTime > 2000) {{ // More than 2 seconds
                 failedLoads++;
-                if (failedLoads > 2) {
+                if (failedLoads > 2) {{
                     dosWarning.style.display = 'block';
-                }
-            } else {
+                }}
+            }} else {{
                 failedLoads = 0;
                 dosWarning.style.display = 'none';
-            }
+            }}
             
             // Adjust cycle speed based on response time (cool effect!)
-            if (lastLoadTime > cycleSpeed * 0.8) {
+            if (lastLoadTime > cycleSpeed * 0.8) {{
                 // Server is struggling, slow down
                 cycleSpeed = Math.min(2000, lastLoadTime * 1.2);
                 speedSlider.value = cycleSpeed;
                 speedValue.textContent = cycleSpeed + 'ms';
-            }
-        };
+            }}
+        }};
         
-        image.onerror = function() {
+        image.onerror = function() {{
             loading.style.display = 'none';
             dosWarning.style.display = 'block';
             dosWarning.innerHTML = '🚨 IMAGE FAILED TO LOAD - SERVER OVERLOADED 🚨';
             failedLoads++;
             
             // Still try to continue cycling
-            if (isCycling) {
+            if (isCycling) {{
                 startCycle();
-            }
-        };
+            }}
+        }};
         
         // Center image
-        function centerImage() {
+        function centerImage() {{
             const rect = wrapper.getBoundingClientRect();
             image.style.top = rect.height / 2 + 'px';
             image.style.left = rect.width / 2 + 'px';
-        }
+        }}
         
         // Transform
-        function updateImageTransform() {
-            image.style.transform = `translate(-50%, -50%) scale(${scale}) translate(${posX}px, ${posY}px)`;
+        function updateImageTransform() {{
+            image.style.transform = `translate(-50%, -50%) scale(${{scale}}) translate(${{posX}}px, ${{posY}}px)`;
             updateDisplay();
-        }
+        }}
         
         // Zoom
-        function updateZoom() {
+        function updateZoom() {{
             scale = parseFloat(zoomSlider.value);
             zoomValue.textContent = scale.toFixed(2) + 'x';
             updateImageTransform();
-        }
+        }}
         
         // Display update
-        function updateDisplay() {
-            coordsDisplay.textContent = `Iteration: ${currentIter} | Zoom: ${scale.toFixed(2)}x`;
-        }
+        function updateDisplay() {{
+            coordsDisplay.textContent = `Iteration: ${{currentIter}} | Zoom: ${{scale.toFixed(2)}}x`;
+        }}
         
         // Drag handlers
-        function startDrag(e) {
+        function startDrag(e) {{
             e.preventDefault();
             isDragging = true;
             startX = e.clientX || e.touches[0].clientX;
@@ -584,9 +584,9 @@ def fractal_viewer():
             startPosX = posX;
             startPosY = posY;
             wrapper.style.cursor = 'grabbing';
-        }
+        }}
         
-        function handleDrag(e) {
+        function handleDrag(e) {{
             if (!isDragging) return;
             e.preventDefault();
             
@@ -600,23 +600,23 @@ def fractal_viewer():
             posY = startPosY + deltaY;
             
             updateImageTransform();
-        }
+        }}
         
-        function handleTouchStart(e) {
+        function handleTouchStart(e) {{
             if (e.touches.length === 1) startDrag(e);
-        }
+        }}
         
-        function handleTouchMove(e) {
+        function handleTouchMove(e) {{
             if (e.touches.length === 1) handleDrag(e);
-        }
+        }}
         
-        function endDrag() {
+        function endDrag() {{
             isDragging = false;
             wrapper.style.cursor = 'grab';
-        }
+        }}
         
         // Wheel zoom
-        function handleWheel(e) {
+        function handleWheel(e) {{
             e.preventDefault();
             
             const zoomIntensity = 0.1;
@@ -635,28 +635,28 @@ def fractal_viewer():
             const oldScale = scale;
             scale = Math.max(0.1, Math.min(5, scale * zoomAmount));
             
-            if (oldScale !== scale) {
+            if (oldScale !== scale) {{
                 posX += mouseOffsetX * (1 - scale / oldScale);
                 posY += mouseOffsetY * (1 - scale / oldScale);
-            }
+            }}
             
             zoomSlider.value = scale;
             updateImageTransform();
-        }
+        }}
         
         // Reset
-        function resetView() {
+        function resetView() {{
             scale = 1.0;
             posX = 0;
             posY = 0;
             zoomSlider.value = 1.0;
             updateImageTransform();
-        }
+        }}
         
         // Info
-        function toggleInfo() {
-            alert(`Fractal Viewer - Live Iteration Cycling\nIterations: 10 → 100\nCycle Speed: ${cycleSpeed}ms\nServer Response: ${lastLoadTime}ms`);
-        }
+        function toggleInfo() {{
+            alert(`Fractal Viewer - Live Iteration Cycling\nIterations: 10 → 100\nCycle Speed: ${{cycleSpeed}}ms\nServer Response: ${{lastLoadTime}}ms`);
+        }}
         
         // Initialize on load
         window.addEventListener('DOMContentLoaded', init);
