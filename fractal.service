@@ -7,7 +7,7 @@ Wants=network.target
 Type=simple
 User=kali
 WorkingDirectory=/var/www/html/fractal
-ExecStart=/usr/local/bin/gunicorn --workers 10 fractal_app:app
+ExecStart=/usr/local/bin/gunicorn --workers 10 --bind 127.0.0.1:5000 fractal_app:app
 Restart=always
 RestartSec=10
 
@@ -16,24 +16,24 @@ RestartSec=10
 # ============================================
 
 # NO MEMORY LIMITS - Allows giant fractals to consume all RAM
-# MemoryMax=512M  ← COMMENTED OUT = UNLIMITED
+# MemoryMax=512M
 
 # NO CPU LIMITS - Can use 100% of all cores
-# CPUQuota=50%    ← COMMENTED OUT = UNLIMITED
+# CPUQuota=50%
 
 # UNLIMITED PROCESSES - Can spawn many workers
-# TasksMax=5      ← COMMENTED OUT = UNLIMITED
+# TasksMax=5
 
 # LONG TIMEOUTS - Keeps hanging processes alive
-TimeoutStartSec=300      # 5 minutes to start
-TimeoutStopSec=300       # 5 minutes to stop
-TimeoutSec=300          # 5 minutes total
+TimeoutStartSec=300
+TimeoutStopSec=300
+TimeoutSec=300
 
 # Allow unlimited file descriptors
 LimitNOFILE=65535
 
 # Keep process alive even if misbehaving
-KillMode=process        # Don't kill child processes
+KillMode=process
 Restart=always
 
 # No protection settings
