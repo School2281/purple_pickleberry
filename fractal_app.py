@@ -252,39 +252,14 @@ def fractal_viewer():
         
         .loading {{ 
             position: absolute;
-            bottom: 20px;
-            right: 20px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
             background: rgba(0,0,0,0.8);
-            backdrop-filter: blur(5px);
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 0.9rem;
+            padding: 20px 40px;
+            border-radius: 15px;
+            font-size: 1.2rem;
             z-index: 10;
-            border: 1px solid rgba(255,255,255,0.2);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            pointer-events: none;
-            animation: slideIn 0.3s ease-out;
-        }}
-        
-        .loading-spinner {{
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }}
-        
-        @keyframes spin {{
-            to {{ transform: rotate(360deg); }}
-        }}
-        
-        @keyframes slideIn {{
-            from {{ transform: translateX(100px); opacity: 0; }}
-            to {{ transform: translateX(0); opacity: 1; }}
         }}
         
         .coordinates {{ 
@@ -297,7 +272,6 @@ def fractal_viewer():
             font-family: 'Monaco', 'Consolas', monospace;
             font-size: 0.9rem;
             pointer-events: none;
-            backdrop-filter: blur(5px);
         }}
         
         .dos-warning {{
@@ -320,12 +294,11 @@ def fractal_viewer():
         
         .cycle-controls {{
             display: flex;
-            gap: 15px;
+            gap: 10px;
             align-items: center;
             background: rgba(255,255,255,0.1);
-            padding: 10px 15px;
+            padding: 10px;
             border-radius: 10px;
-            flex-wrap: wrap;
         }}
         
         button {{
@@ -353,54 +326,7 @@ def fractal_viewer():
         .speed-control {{
             display: flex;
             align-items: center;
-            gap: 15px;
-            background: rgba(0,0,0,0.2);
-            padding: 8px 15px;
-            border-radius: 10px;
-        }}
-        
-        .speed-presets {{
-            display: flex;
-            gap: 5px;
-        }}
-        
-        .speed-preset {{
-            background: rgba(255,255,255,0.2);
-            border: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }}
-        
-        .speed-preset:hover {{
-            background: rgba(255,255,255,0.4);
-            transform: translateY(0);
-        }}
-        
-        .speed-preset.active {{
-            background: rgba(255,255,255,0.5);
-            font-weight: bold;
-        }}
-        
-        .step-control {{
-            display: flex;
-            align-items: center;
             gap: 10px;
-            background: rgba(0,0,0,0.2);
-            padding: 8px 15px;
-            border-radius: 10px;
-        }}
-        
-        .step-value {{
-            font-family: 'Monaco', 'Consolas', monospace;
-            min-width: 60px;
-            text-align: center;
-            background: rgba(255,255,255,0.2);
-            padding: 4px 8px;
-            border-radius: 5px;
         }}
         
         .metric {{
@@ -434,26 +360,10 @@ def fractal_viewer():
             <div class="controls">
                 <div class="cycle-controls">
                     <button onclick="toggleCycle()" id="cycleButton">⏸️ Pause</button>
-                    
                     <div class="speed-control">
                         <label>Speed:</label>
-                        <input type="range" id="speedSlider" min="50" max="2000" value="500" step="10">
+                        <input type="range" id="speedSlider" min="100" max="2000" value="500" step="50">
                         <span id="speedValue">500ms</span>
-                        <div class="speed-presets">
-                            <button class="speed-preset" onclick="setSpeed(2000)">🐢 Slow</button>
-                            <button class="speed-preset" onclick="setSpeed(500)">⚡ Normal</button>
-                            <button class="speed-preset" onclick="setSpeed(100)">🚀 Fast</button>
-                            <button class="speed-preset" onclick="setSpeed(50)">💨 Ultra</button>
-                        </div>
-                    </div>
-                    
-                    <div class="step-control">
-                        <label>Step:</label>
-                        <button onclick="changeStep(-1)" id="stepDown">-1</button>
-                        <span class="step-value" id="stepValue">1</span>
-                        <button onclick="changeStep(1)" id="stepUp">+1</button>
-                        <button onclick="setStep(5)">5</button>
-                        <button onclick="setStep(10)">10</button>
                     </div>
                 </div>
                 
@@ -472,17 +382,14 @@ def fractal_viewer():
             </div>
             
             <div class="image-wrapper" id="imageWrapper">
-                <div class="loading" id="loading">
-                    <div class="loading-spinner"></div>
-                    <span>Loading fractal...</span>
-                </div>
+                <div class="loading" id="loading">Loading fractal...</div>
                 <img id="fractalImage" src="/fractal?w=800&h=600&iter=10" alt="Fractal">
                 <div class="coordinates" id="coords">Iteration: 10 | Zoom: 1.00x</div>
             </div>
         </div>
     </div>
 
-    <script>
+        <script>
         // State
         let scale = 1.0;
         let posX = 0;
@@ -495,7 +402,6 @@ def fractal_viewer():
         let cycleDirection = 1; // 1 for up, -1 for down
         let isCycling = true;
         let cycleSpeed = 500; // ms
-        let stepSize = 1; // Number of iterations to jump each cycle
         let cycleTimer;
         let lastLoadTime = 0;
         let failedLoads = 0;
@@ -511,7 +417,6 @@ def fractal_viewer():
         const cycleButton = document.getElementById('cycleButton');
         const speedSlider = document.getElementById('speedSlider');
         const speedValue = document.getElementById('speedValue');
-        const stepValue = document.getElementById('stepValue');
         const zoomSlider = document.getElementById('zoom');
         const zoomValue = document.getElementById('zoomValue');
         const coordsDisplay = document.getElementById('coords');
@@ -545,33 +450,6 @@ def fractal_viewer():
             updateDisplay();
         }}
         
-        // Step control functions
-        function changeStep(delta) {{
-            stepSize = Math.max(1, Math.min(20, stepSize + delta));
-            stepValue.textContent = stepSize;
-        }}
-        
-        function setStep(step) {{
-            stepSize = step;
-            stepValue.textContent = stepSize;
-        }}
-        
-        // Speed preset
-        function setSpeed(speed) {{
-            cycleSpeed = speed;
-            speedSlider.value = speed;
-            speedValue.textContent = speed + 'ms';
-            if (isCycling) {{
-                restartCycle();
-            }}
-            
-            // Highlight active preset
-            document.querySelectorAll('.speed-preset').forEach(btn => {{
-                btn.classList.remove('active');
-            }});
-            event.target.classList.add('active');
-        }}
-        
         // Cycle functions
         function startCycle() {{
             if (cycleTimer) clearTimeout(cycleTimer);
@@ -603,8 +481,8 @@ def fractal_viewer():
         function loadNextIteration() {{
             if (!isCycling) return;
             
-            // Update iteration with step size
-            currentIter += cycleDirection * stepSize;
+            // Update iteration
+            currentIter += cycleDirection;
             
             // Bounce between 10 and 100
             if (currentIter >= 100) {{
@@ -628,7 +506,7 @@ def fractal_viewer():
             image.src = baseUrl + '&t=' + startTime;
             
             // Show loading
-            loading.style.display = 'flex';
+            loading.style.display = 'block';
             
             // Schedule next iteration
             cycleTimer = setTimeout(loadNextIteration, cycleSpeed);
@@ -777,7 +655,7 @@ def fractal_viewer():
         
         // Info
         function toggleInfo() {{
-            alert(`Fractal Viewer - Live Iteration Cycling\nIterations: 10 → 100\nStep Size: ${{stepSize}}\nCycle Speed: ${{cycleSpeed}}ms\nServer Response: ${{lastLoadTime}}ms`);
+            alert(`Fractal Viewer - Live Iteration Cycling\nIterations: 10 → 100\nCycle Speed: ${{cycleSpeed}}ms\nServer Response: ${{lastLoadTime}}ms`);
         }}
         
         // Initialize on load
