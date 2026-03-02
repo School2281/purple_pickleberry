@@ -100,7 +100,8 @@ def generate_fractal():
     buf.seek(0)
     
     return Response(buf.getvalue(), mimetype='image/png')
-    
+
+@app.route('/viewer')
 def fractal_viewer():
     """Interactive viewer that cycles through iterations"""
     
