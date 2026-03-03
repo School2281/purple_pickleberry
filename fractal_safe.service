@@ -11,7 +11,7 @@ WorkingDirectory=/var/www/html/fractal
 
 # Use Gunicorn instead of direct Python (better process management)
 ExecStart=/usr/local/bin/gunicorn \
-          --workers 2 \
+          --workers 8 \
           --threads 1 \
           --worker-class sync \
           --timeout 30 \
