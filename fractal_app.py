@@ -476,7 +476,7 @@ def fractal_viewer():
                     <div class="loading-spinner"></div>
                     <span>Loading fractal...</span>
                 </div>
-                <img id="fractalImage" src="/fractal?w=800&h=600&iter=10" alt="Fractal">
+                <img id="fractalImage" src="/fractal_viewer?w=800&h=600&iter=10" alt="Fractal">
                 <div class="coordinates" id="coords">Iteration: 10 | Zoom: 1.00x</div>
             </div>
         </div>
@@ -624,7 +624,7 @@ def fractal_viewer():
             
             // Load new image with timestamp to prevent caching
             const startTime = Date.now();
-            const baseUrl = '/fractal?w=800&h=600&iter=' + currentIter;
+            const baseUrl = '/fractal_viewer?w=800&h=600&iter=' + currentIter;
             image.src = baseUrl + '&t=' + startTime;
             
             // Show loading
