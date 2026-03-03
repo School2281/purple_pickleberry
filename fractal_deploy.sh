@@ -146,6 +146,23 @@ log "Installing Python packages..."
 pip3 install flask numpy matplotlib pillow gunicorn >> "$LOG_FILE" 2>&1
 
 # ============================================
+# CLEAN UP OLD CONFIGS
+# ============================================
+
+log "Cleaning up old configurations..."
+
+# Remove old symlinks
+sudo rm -f /etc/nginx/sites-enabled/fractal
+sudo rm -f /etc/nginx/sites-enabled/fractal_server.conf
+sudo rm -f /etc/nginx/sites-enabled/default
+
+# Remove old config files from sites-available (keep backup)
+if [ -f "$NGINX_SITES_AVAILABLE/fractal" ]; then
+    sudo mv "$NGINX_SITES_AVAILABLE/fractal" "$NGINX_SITES_AVAILABLE/fractal.old.$(date +%Y%m%d_%H%M%S)" 2>/dev/null || true
+    log "  ✅ Backed up old fractal config"
+fi
+
+# ============================================
 # DEPLOY FILES
 # ============================================
 
@@ -169,11 +186,11 @@ if [ -f "$SOURCE_DIR/fractal.service" ]; then
     sudo chmod 644 "$SYSTEMD_DIR/fractal.service"
 fi
 
-# Copy fractal_server.conf
+# Copy fractal_server.conf to the CORRECT filename
 if [ -f "$SOURCE_DIR/fractal_server.conf" ]; then
-    log "Copying fractal_server.conf to $NGINX_SITES_AVAILABLE/fractal"
-    sudo cp "$SOURCE_DIR/fractal_server.conf" "$NGINX_SITES_AVAILABLE/fractal"
-    sudo chmod 644 "$NGINX_SITES_AVAILABLE/fractal"
+    log "Copying fractal_server.conf to $NGINX_SITES_AVAILABLE/fractal_server.conf"
+    sudo cp "$SOURCE_DIR/fractal_server.conf" "$NGINX_SITES_AVAILABLE/fractal_server.conf"
+    sudo chmod 644 "$NGINX_SITES_AVAILABLE/fractal_server.conf"
 fi
 
 # Copy nginx.conf (MAIN NGINX CONFIG)
@@ -191,10 +208,9 @@ if [ -f "$SOURCE_DIR/nginx.conf" ]; then
     log "  ✅ nginx.conf deployed"
 fi
 
-# Create symlink in sites-enabled
+# Create symlink in sites-enabled using the CORRECT filename
 log "Enabling site in NGINX..."
-sudo ln -sf "$NGINX_SITES_AVAILABLE/fractal" /etc/nginx/sites-enabled/
-sudo rm -f /etc/nginx/sites-enabled/default
+sudo ln -sf "$NGINX_SITES_AVAILABLE/fractal_server.conf" /etc/nginx/sites-enabled/
 
 # Copy any additional static files (HTML, CSS, etc.)
 log "Copying additional files..."
@@ -312,10 +328,12 @@ echo "   http://$IP_ADDR/status      - Status check"
 echo "   http://$IP_ADDR/light       - Light test"
 echo "   http://$IP_ADDR/viewer      - Interactive viewer"
 echo "   http://$IP_ADDR/fractal?w=800&h=600  - Generate fractal"
+echo "   http://$IP_ADDR/fractal_viewer?w=800&h=600 - Viewer endpoint"
 echo ""
 echo -e "${GREEN}Backups created:${NC}"
 echo "   /etc/nginx/nginx.conf.backup.*"
 echo "   /etc/nginx/sites-enabled.backup.*"
+echo "   /etc/nginx/sites-available/fractal.old.*"
 echo ""
 echo "========================================="
 
@@ -333,6 +351,7 @@ $(ls -la "$SOURCE_DIR"/*.{py,service,conf} 2>/dev/null)
 Backups:
 - /etc/nginx/nginx.conf.backup.$(date +%Y%m%d_%H%M%S)
 - /etc/nginx/sites-enabled.backup.$(date +%Y%m%d_%H%M%S)
+- /etc/nginx/sites-available/fractal.old.$(date +%Y%m%d_%H%M%S)
 EOF
 
 log "Deployment completed successfully!"
