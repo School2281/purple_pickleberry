@@ -5,8 +5,8 @@ Wants=network.target
 
 [Service]
 Type=simple
-User=kali
-WorkingDirectory=/var/www/html/fractal
+User=pi
+WorkingDirectory=/home/pi/fractal
 ExecStart=/usr/local/bin/gunicorn --workers 10 --bind 127.0.0.1:5000 fractal_app:app
 Restart=always
 RestartSec=10
