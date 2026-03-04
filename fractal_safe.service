@@ -5,9 +5,9 @@ Wants=network.target
 
 [Service]
 Type=simple
-User=kali
+User=pi
 Group=www-data
-WorkingDirectory=/var/www/html/fractal
+WorkingDirectory=/home/pi/fractal
 
 # Use Gunicorn instead of direct Python (better process management)
 ExecStart=/usr/local/bin/gunicorn \
