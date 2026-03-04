@@ -7,7 +7,7 @@ Wants=network.target
 Type=simple
 User=pi
 WorkingDirectory=/home/pi/fractal
-ExecStart=/usr/local/bin/gunicorn --workers 10 --bind 127.0.0.1:5000 fractal_app:app
+ExecStart=/home/pi/venv/bin/gunicorn --workers 10 --bind 127.0.0.1:5000 fractal_app:app
 Restart=always
 RestartSec=10
 
