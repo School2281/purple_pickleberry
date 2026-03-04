@@ -26,6 +26,8 @@ SYSTEMD_DIR="/etc/systemd/system"
 # Log file
 LOG_FILE="/home/pi/fractal_deploy.log"           # <-- Changed to pi home directory
 
+source /home/pi/venv/bin/activate                 # Add this line
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
