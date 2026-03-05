@@ -5,12 +5,11 @@ Wants=network.target
 
 [Service]
 Type=simple
-User=pi
+User=kali
 Group=www-data
-WorkingDirectory=/home/pi/fractal
+WorkingDirectory=/var/www/html/fractal
 
-# Use Gunicorn instead of direct Python (better process management)
-ExecStart=/usr/local/bin/gunicorn \
+ExecStart=/home/kali/venv/bin/gunicorn \
           --workers 8 \
           --threads 1 \
           --worker-class sync \
