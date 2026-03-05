@@ -10,7 +10,7 @@
 
 set -e  # Exit on error
 
-source /home/pi/venv/bin/activate                 # Add this line
+source /home/kali/venv/bin/activate                 # Add this line
 
 # ============================================
 # CONFIGURATION - CHANGE THESE TO MATCH YOUR SETUP
