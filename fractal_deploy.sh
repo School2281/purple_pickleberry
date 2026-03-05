@@ -11,6 +11,7 @@
 set -e  # Exit on error
              # Add this line
 
+source /home/kali/venv/bin/activate
 # ============================================
 # CONFIGURATION - CHANGE THESE TO MATCH YOUR SETUP
 # ============================================
