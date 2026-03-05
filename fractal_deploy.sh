@@ -9,8 +9,7 @@
 [ -x "$0" ] || chmod +x "$0"
 
 set -e  # Exit on error
-
-source /home/kali/venv/bin/activate                 # Add this line
+             # Add this line
 
 # ============================================
 # CONFIGURATION - CHANGE THESE TO MATCH YOUR SETUP
