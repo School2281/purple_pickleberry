@@ -4,6 +4,8 @@
 
 set -e  # Exit on any error
 
+source /home/kali/venv/bin/activate
+
 # Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
