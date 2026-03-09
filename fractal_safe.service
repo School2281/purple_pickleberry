@@ -9,8 +9,8 @@ User=kali
 Group=www-data
 WorkingDirectory=/var/www/html/fractal
 
-ExecStart=/home/kali/venv/bin/gunicorn \
-          --workers 8 \
+ExecStart=/home/kali/venv_dos/bin/gunicorn \
+          --workers 4 \
           --threads 1 \
           --worker-class sync \
           --timeout 30 \
