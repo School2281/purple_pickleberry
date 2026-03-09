@@ -11,7 +11,34 @@
 set -e  # Exit on error
              # Add this line
 
-source /home/kali/venv/bin/activate
+# ============================================
+# SETUP VIRTUAL ENVIRONMENT
+# ============================================
+
+VENV_PATH="/home/kali/venv_dos"  # Changed from venv to venv_dos
+
+# Check if virtual environment exists, create if not
+if [ ! -d "$VENV_PATH" ]; then
+    log "Virtual environment not found. Creating one..."
+    
+    # Install python3-venv if needed
+    if ! dpkg -l | grep -q python3-venv; then
+        log "Installing python3-venv..."
+        sudo apt update -qq
+        sudo apt install -y -qq python3-venv
+    fi
+    
+    # Create virtual environment
+    python3 -m venv "$VENV_PATH"
+    log "✅ Virtual environment created at $VENV_PATH"
+else
+    log "✅ Virtual environment found at $VENV_PATH"
+fi
+
+# Activate virtual environment
+source "$VENV_PATH/bin/activate"
+log "✅ Virtual environment activated"
+
 # ============================================
 # CONFIGURATION - CHANGE THESE TO MATCH YOUR SETUP
 # ============================================
