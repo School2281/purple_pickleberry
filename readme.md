@@ -28,12 +28,25 @@ cd /home/kali/purple_pickleberry
 
 ### 3. Make the Deployment Script Executable
 ```bash
-chmod +x deploy_fractal.sh
+chmod +x fractal_deploy.sh
 ```
 
 ### 4. Run the Deployment Script
 Execute the deployment script with sudo privileges:
 
 ```bash
-sudo ./deploy_fractal.sh
+sudo ./fractal_deploy.sh
+```
+
+> **Note:** After you are done with the unsecure setup
+### 5. Make the Securing Script Executable
+```bash
+chmod +x fractal_safe.sh
+```
+
+### 6. Run the Securing Script
+Execute the securing script with sudo privileges:
+
+```bash
+sudo ./fractal_safe.sh
 ```
