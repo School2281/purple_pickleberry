@@ -50,3 +50,7 @@ Execute the securing script with sudo privileges:
 ```bash
 sudo ./fractal_safe.sh
 ```
+
+---
+## Debugging
+Critically, a non-zero chance exists for some critical error pertinent to some critical line in some critical componenet of one of these critical scripts. In such critical cases and scenarios, my suggestion is to consult ai for further advice.
